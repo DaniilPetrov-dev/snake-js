@@ -2,7 +2,7 @@ var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 // Размер одной клеточки на поле — 16 пикселей.
 var grid = 16;
-var count = 0; //Переменная, отвечающая за скорость змейки, поменять название
+var speed = 0; //Переменная, отвечающая за скорость змейки, поменять название
 var snake = {
   // Начальные координаты.
   x: 160,
@@ -19,21 +19,33 @@ var apple = {
   x: 320,
   y: 320
 };
+var count = 0;
+var startButton = document.getElementById('start');
 
+function startScreen() {
+	// Показываем стартовый экран, при нажатии на кнопку старт, убираем кнопку, запускаем игровой цикл
+	document.addEventListener("click", function(e) {
+			if(e.target.id === 'start') {
+				console.log('Start session');
+				startButton.remove();
+				requestAnimationFrame(loop);
+			}
+	  });
+}
 
 // Игровой цикл — основной процесс, внутри которого будет всё происходить.
 function loop() {
 	// Замедлим скорость игры с 60 кадров в секунду до 15. Для этого пропутим три кадра, отрисовывая только каждый четветрый.
 	requestAnimationFrame(loop);
-	// Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная count меньше четырёх, код выполняться не будет.
-	if (++count < 4) {
+	// Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная speed меньше четырёх, код выполняться не будет.
+	if (++speed < 4) {
 	  return;
 	}
 
 
 	// В блоке ниже очищается игровое поле, обнуляется скорость и змейка двигается с нужной скоростью
 	// Обнуляем переменную скорости.
-	count = 0;
+	speed = 0;
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	snake.x += snake.dx;
 	snake.y += snake.dy;
@@ -95,6 +107,7 @@ function loop() {
 		}
 	  }
 	});
+
   }
 
 
@@ -121,9 +134,13 @@ document.addEventListener('keydown', function (e) {
 	}
   });
 
+function dieLoop() {
+	
+}
 
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-requestAnimationFrame(loop);
+
+startScreen();
